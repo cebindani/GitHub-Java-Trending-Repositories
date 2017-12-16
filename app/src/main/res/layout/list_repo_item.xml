@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="16dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ownerAvatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:src="@mipmap/ic_launcher_round" />
+
+    <TextView
+        android:id="@+id/ownerLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/ownerAvatar"
+        android:text="username"
+        android:textAlignment="center"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/repositoryName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/ownerAvatar"
+        android:fontFamily="@font/roboto"
+        android:text="Repository Name"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/repositoryDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/repositoryName"
+        android:layout_below="@id/repositoryName"
+        android:layout_toStartOf="@id/ownerAvatar"
+        android:fontFamily="@font/roboto"
+        android:maxLines="2"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis ornare risus, sit amet ullamcorper elit. Praesent ultrices, ipsum a gravida tempus, metus ipsum porta diam, id eleifend nulla tellus feugiat libero. Donec commodo tortor massa, id maximus libero malesuada vitae. Vivamus diam est, efficitur et mattis sed, varius vitae libero. Fusce mollis risus ante, viverra tristique neque vulputate at. Proin non ipsum eu nisl sagittis consequat. Nullam nec sollicitudin metus. Ut id lacus mi. Phasellus hendrerit mi et diam varius, ac pulvinar est pretium."
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/starIcon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignStart="@id/repositoryDescription"
+        android:layout_below="@+id/repositoryDescription"
+        android:layout_centerVertical="true"
+        android:layout_margin="4dp"
+        android:src="@android:drawable/star_on" />
+
+    <TextView
+        android:id="@+id/starsCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/starIcon"
+        android:layout_toEndOf="@+id/starIcon"
+        android:paddingEnd="16dp"
+        android:text="24123" />
+
+    <ImageView
+        android:id="@+id/forkIcon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_below="@id/repositoryDescription"
+        android:layout_margin="4dp"
+        android:layout_toRightOf="@+id/starsCount"
+        android:src="@android:drawable/ic_menu_share" />
+
+    <TextView
+        android:id="@+id/forksCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/forkIcon"
+        android:layout_toRightOf="@id/forkIcon"
+        android:text="12333" />
+
+
+</RelativeLayout>
