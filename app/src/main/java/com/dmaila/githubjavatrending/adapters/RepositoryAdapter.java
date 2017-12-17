@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dmaila.githubjavatrending.PullRequestsActivity;
 import com.dmaila.githubjavatrending.R;
@@ -17,6 +16,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.dmaila.githubjavatrending.PullRequestsActivity.REPOSITORY_EXTRA;
 
 
 public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.ViewHolder> {
@@ -72,12 +73,12 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mRepositoryName = (TextView) itemView.findViewById(R.id.repositoryName);
-            mDescription = (TextView) itemView.findViewById(R.id.repositoryDescription);
-            mOwnerLogin = (TextView) itemView.findViewById(R.id.ownerLogin);
-            mOwnerAvatar = (CircleImageView) itemView.findViewById(R.id.ownerAvatar);
-            mStargazersCount = (TextView) itemView.findViewById(R.id.starsCount);
-            mForksCount = (TextView) itemView.findViewById(R.id.forksCount);
+            mRepositoryName = itemView.findViewById(R.id.repositoryName);
+            mDescription = itemView.findViewById(R.id.repositoryDescription);
+            mOwnerLogin = itemView.findViewById(R.id.ownerLogin);
+            mOwnerAvatar = itemView.findViewById(R.id.ownerAvatar);
+            mStargazersCount = itemView.findViewById(R.id.starsCount);
+            mForksCount = itemView.findViewById(R.id.forksCount);
 
             itemView.setOnClickListener(this);
 
@@ -87,16 +88,12 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            Toast.makeText(context, mRepositoryName.getText().toString(), Toast.LENGTH_SHORT).show();
 
-            Intent pullRequestIntent = new Intent(context, PullRequestsActivity.class);
-            pullRequestIntent.putExtra("REPO_FULL_NAME",mRepositories.get(position).getFullName());
-            context.startActivity(pullRequestIntent);
+            Repository repository = mRepositories.get(position);
 
-            //create new intent
-            //send owner and repositoryName
-
-            //on new intent, call {base_url} + /repos/{owner}/{repo}/pulls
+            Intent intent = new Intent(context, PullRequestsActivity.class);
+            intent.putExtra(REPOSITORY_EXTRA, repository);
+            context.startActivity(intent);
 
         }
 
