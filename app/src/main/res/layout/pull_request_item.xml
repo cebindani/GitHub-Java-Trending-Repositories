@@ -3,26 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
-    android:padding="16dp">
+    android:paddingBottom="16dp"
+    android:paddingStart="16dp">
+
+
+    <View
+        android:id="@+id/pullRequestStatusSemaphore"
+        android:layout_width="48dp"
+        android:layout_height="6dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/stateOpen"
+        android:paddingBottom="1dp" />
 
     <TextView
         android:id="@+id/pullRequestTitle"
         style="@style/item_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/pullRequestStatusSemaphore"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
         android:text="@string/pull_request_name" />
 
     <TextView
         android:id="@+id/pullRequestBody"
+        style="@style/item_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         android:layout_alignStart="@id/pullRequestTitle"
         android:layout_below="@id/pullRequestTitle"
-        android:text="@string/lorem_ipsun"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="4dp"
+
         android:maxLines="2"
-        style="@style/item_body" />
+        android:text="@string/lorem_ipsun" />
 
     <ImageView
         android:id="@+id/pullRequestOwnerAvatar"
@@ -36,12 +55,12 @@
 
     <TextView
         android:id="@+id/pullRequestOwnerLogin"
+        style="@style/username_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/pullRequestOwnerAvatar"
         android:layout_toEndOf="@id/pullRequestOwnerAvatar"
-        android:text="@string/username"
-        style="@style/username_style" />
+        android:text="@string/username" />
 
     <TextView
         android:id="@+id/pullRequestOwnerName"
@@ -59,7 +78,11 @@
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@id/pullRequestOwnerLogin"
         android:layout_below="@id/pullRequestBody"
-        android:text="@string/created" />
+        android:layout_marginEnd="16dp"
+        android:layout_toLeftOf="@id/pullRequestStatusSemaphore"
+        android:text="@string/created"
+        android:textAllCaps="true"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/pullRequestUpdated"
@@ -67,7 +90,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@id/pullRequestCreated"
-        android:text="@string/updated" />
+        android:layout_marginEnd="16dp"
+        android:layout_toLeftOf="@id/pullRequestStatusSemaphore"
+        android:text="@string/updated"
+        android:textAllCaps="true"
+        android:textSize="12sp" />
 
 
 </RelativeLayout>

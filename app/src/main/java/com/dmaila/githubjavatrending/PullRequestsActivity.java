@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.dmaila.githubjavatrending.adapters.PullRequestAdapter;
 import com.dmaila.githubjavatrending.data.PullRequest;
+import com.dmaila.githubjavatrending.data.Repository;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
@@ -27,12 +28,12 @@ import okhttp3.Response;
 public class PullRequestsActivity extends AppCompatActivity {
 
     private static final String PR_OPEN = "open";
+    public static final String REPOSITORY_EXTRA = "REPOSITORY_EXTRA";
 
     private int openPullRequestsCounter = 0;
     private int closedPullRequestsCounter = 0;
 
-    String ownerLogin;
-    String repoFullName;
+    Repository repository;
     List<PullRequest> pullRequests = new ArrayList<>();
 
     @Override
@@ -40,9 +41,11 @@ public class PullRequestsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pull_requests);
 
-        repoFullName = getIntent().getStringExtra("REPO_FULL_NAME");
 
-        getPullRequests("ReactiveX", "RxJava");
+        if (getIntent() != null && getIntent().hasExtra(REPOSITORY_EXTRA))
+            repository = getIntent().getParcelableExtra(REPOSITORY_EXTRA);
+
+            getPullRequests(repository.getOwnerLogin(), repository.getName());
     }
 
     private void getPullRequests(String ownerLogin, String repoFullName) {
@@ -81,7 +84,7 @@ public class PullRequestsActivity extends AppCompatActivity {
     private void updateView(List<PullRequest> pullRequests) {
         countPullRequestStatus(pullRequests);
 
-        TextView statusCount = (TextView) findViewById(R.id.pull_requests_status);
+        TextView statusCount = findViewById(R.id.pull_requests_status);
         String formatedString = getString(R.string.opened_closed_status, openPullRequestsCounter, closedPullRequestsCounter);
         statusCount.setText(formatedString);
 

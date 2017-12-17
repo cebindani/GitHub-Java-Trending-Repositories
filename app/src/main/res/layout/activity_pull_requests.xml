@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/pull_requests_status"
-        style="@style/username_style"
+        style="@style/counters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/lightGray"

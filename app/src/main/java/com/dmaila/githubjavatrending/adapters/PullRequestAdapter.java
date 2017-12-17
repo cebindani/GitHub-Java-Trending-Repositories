@@ -14,8 +14,12 @@ import com.dmaila.githubjavatrending.R;
 import com.dmaila.githubjavatrending.data.PullRequest;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class PullRequestAdapter extends RecyclerView.Adapter<PullRequestAdapter.ViewHolder> {
@@ -46,20 +50,49 @@ public class PullRequestAdapter extends RecyclerView.Adapter<PullRequestAdapter.
             holder.pullRequestTitle.setText(pullRequest.getTitle());
             holder.pullRequestBody.setText(pullRequest.getBody());
             holder.pullRequestOwnerLogin.setText(pullRequest.getPullRequestOwnerLogin());
-            holder.pullRequestOwnerFullName.setText(pullRequest.getRepositoryFullName());
+            if (pullRequest.getRepositoryFullName() != null) {
+                holder.pullRequestRepoFullName.setText(pullRequest.getRepositoryFullName());
+            } else {
+                holder.pullRequestRepoFullName.setText(R.string.unknown_repository);
+//                holder.pullRequestRepoFullName.setVisibility(View.GONE);
+            }
 
-            //fixme: date
-            String createdDate = pullRequest.getCreatedAt(); //new SimpleDateFormat(TIMESTAMP_MASK, Locale.getDefault()).format(pullRequest.getCreatedAt());
-            String updatedDate = pullRequest.getUpdatedAt(); //new SimpleDateFormat(TIMESTAMP_MASK, Locale.getDefault()).format(pullRequest.getUpdatedAt());
-            String createdDateFormated = context.getString(R.string.created, createdDate);
-            String updatedDateFormated = context.getString(R.string.updated, updatedDate);
+            String createdDate = formattedDate(pullRequest.getCreatedAt());
+            String updatedDate = formattedDate(pullRequest.getUpdatedAt());
+
+
+            String createdDateFormatted = context.getString(R.string.created, createdDate);
+            String updatedDateFormatted = context.getString(R.string.updated, updatedDate);
 
             holder.setAvatarImage(pullRequest.getPullRequestOwnerAvatar());
-            holder.createDateView.setText(createdDateFormated);
-            holder.updateDateView.setText(updatedDateFormated);
+            holder.createDateView.setText(createdDateFormatted);
+            holder.updateDateView.setText(updatedDateFormatted);
+
+            if (pullRequest.getState().equals("open")) {
+                holder.pullRequestStatusView.setBackgroundColor(context.getResources().getColor(R.color.stateOpen));
+            } else if (!pullRequest.getState().equals("open")  && pullRequest.getMergedAt() != null) {
+                holder.pullRequestStatusView.setBackgroundColor(context.getResources().getColor(R.color.stateMerged));
+            } else {
+                holder.pullRequestStatusView.setBackgroundColor(context.getResources().getColor(R.color.stateClosed));
+            }
+
 
 
         }
+    }
+
+    private String formattedDate(String dateString) {
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat(TIMESTAMP_MASK, Locale.getDefault());
+        Date date;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(dateString);
+            return outputDateFormat.format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+
     }
 
     @Override
@@ -72,30 +105,28 @@ public class PullRequestAdapter extends RecyclerView.Adapter<PullRequestAdapter.
         TextView pullRequestTitle;
         TextView pullRequestBody;
         TextView pullRequestOwnerLogin;
-        TextView pullRequestOwnerFullName;
+        TextView pullRequestRepoFullName;
         TextView createDateView;
         TextView updateDateView;
         ImageView pullRequestOwnerAvatar;
-        String createdString;
-        String updatedString;
+        View pullRequestStatusView;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            pullRequestTitle = (TextView) itemView.findViewById(R.id.pullRequestTitle);
-            pullRequestBody = (TextView) itemView.findViewById(R.id.pullRequestBody);
-            pullRequestOwnerLogin = (TextView) itemView.findViewById(R.id.pullRequestOwnerLogin);
-            pullRequestOwnerFullName = (TextView) itemView.findViewById(R.id.pullRequestOwnerName);
+            pullRequestTitle = itemView.findViewById(R.id.pullRequestTitle);
+            pullRequestBody = itemView.findViewById(R.id.pullRequestBody);
+            pullRequestOwnerLogin = itemView.findViewById(R.id.pullRequestOwnerLogin);
+            pullRequestRepoFullName = itemView.findViewById(R.id.pullRequestOwnerName);
 
-            createDateView = (TextView) itemView.findViewById(R.id.pullRequestCreated);
-            updateDateView = (TextView) itemView.findViewById(R.id.pullRequestUpdated);
+            createDateView = itemView.findViewById(R.id.pullRequestCreated);
+            updateDateView = itemView.findViewById(R.id.pullRequestUpdated);
 
-            pullRequestOwnerAvatar = (ImageView) itemView.findViewById(R.id.pullRequestOwnerAvatar);
+            pullRequestOwnerAvatar = itemView.findViewById(R.id.pullRequestOwnerAvatar);
+            pullRequestStatusView = itemView.findViewById(R.id.pullRequestStatusSemaphore);
 
             itemView.setOnClickListener(this);
-
-
         }
 
         @Override

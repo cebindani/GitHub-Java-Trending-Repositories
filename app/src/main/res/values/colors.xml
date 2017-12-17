@@ -5,4 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="lightGray">#b1b1b1</color>
     <color name="darkBlue">#283593</color>
+    <color name="linkBlue">#0081C7</color>
+    <color name="stateOpen">#2cbe4e</color>
+    <color name="stateMerged">#6f42c1</color>
+    <color name="stateClosed">#cb2431</color>
+    <color name="gray_E6E5E4">#e6e5e4</color>
 </resources>
