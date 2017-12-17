@@ -1,8 +1,11 @@
 package com.dmaila.githubjavatrending.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.squareup.moshi.Json;
 
-public class RepositoryOwner {
+public class RepositoryOwner implements Parcelable {
 
     @Json(name = "login")
     private String login;
@@ -32,4 +35,36 @@ public class RepositoryOwner {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.login);
+        dest.writeString(this.avatarUrl);
+        dest.writeString(this.htmlUrl);
+    }
+
+    public RepositoryOwner() {
+    }
+
+    protected RepositoryOwner(Parcel in) {
+        this.login = in.readString();
+        this.avatarUrl = in.readString();
+        this.htmlUrl = in.readString();
+    }
+
+    public static final Parcelable.Creator<RepositoryOwner> CREATOR = new Parcelable.Creator<RepositoryOwner>() {
+        @Override
+        public RepositoryOwner createFromParcel(Parcel source) {
+            return new RepositoryOwner(source);
+        }
+
+        @Override
+        public RepositoryOwner[] newArray(int size) {
+            return new RepositoryOwner[size];
+        }
+    };
 }

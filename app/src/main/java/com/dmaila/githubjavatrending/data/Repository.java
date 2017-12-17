@@ -122,6 +122,7 @@ public class Repository implements Parcelable {
                 '}';
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -129,19 +130,37 @@ public class Repository implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
         dest.writeString(this.name);
+        dest.writeString(this.fullName);
+        dest.writeParcelable(this.repositoryOwner, flags);
+        dest.writeString(this.description);
+        dest.writeString(this.pullsUrl);
+        dest.writeInt(this.stargazersCount);
+        dest.writeInt(this.forksCount);
         dest.writeString(this.ownerLogin);
+        dest.writeString(this.ownerAvatarUrl);
+        dest.writeString(this.ownerHtmlUrl);
     }
 
     public Repository() {
     }
 
     protected Repository(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
         this.name = in.readString();
+        this.fullName = in.readString();
+        this.repositoryOwner = in.readParcelable(RepositoryOwner.class.getClassLoader());
+        this.description = in.readString();
+        this.pullsUrl = in.readString();
+        this.stargazersCount = in.readInt();
+        this.forksCount = in.readInt();
         this.ownerLogin = in.readString();
+        this.ownerAvatarUrl = in.readString();
+        this.ownerHtmlUrl = in.readString();
     }
 
-    public static final Parcelable.Creator<Repository> CREATOR = new Parcelable.Creator<Repository>() {
+    public static final Creator<Repository> CREATOR = new Creator<Repository>() {
         @Override
         public Repository createFromParcel(Parcel source) {
             return new Repository(source);
