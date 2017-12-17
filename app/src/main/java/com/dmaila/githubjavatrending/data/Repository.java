@@ -1,9 +1,13 @@
 package com.dmaila.githubjavatrending.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.squareup.moshi.Json;
 
 
-public class Repository {
+public class Repository implements Parcelable {
+
 
     @Json(name = "id")
     private Integer id;
@@ -117,4 +121,35 @@ public class Repository {
                 ", ownerHtmlUrl='" + ownerHtmlUrl + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.ownerLogin);
+    }
+
+    public Repository() {
+    }
+
+    protected Repository(Parcel in) {
+        this.name = in.readString();
+        this.ownerLogin = in.readString();
+    }
+
+    public static final Parcelable.Creator<Repository> CREATOR = new Parcelable.Creator<Repository>() {
+        @Override
+        public Repository createFromParcel(Parcel source) {
+            return new Repository(source);
+        }
+
+        @Override
+        public Repository[] newArray(int size) {
+            return new Repository[size];
+        }
+    };
 }

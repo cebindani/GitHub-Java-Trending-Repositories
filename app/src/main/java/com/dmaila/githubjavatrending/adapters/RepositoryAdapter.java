@@ -1,6 +1,7 @@
-package com.dmaila.githubjavatrending;
+package com.dmaila.githubjavatrending.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dmaila.githubjavatrending.PullRequestsActivity;
+import com.dmaila.githubjavatrending.R;
 import com.dmaila.githubjavatrending.data.Repository;
 import com.squareup.picasso.Picasso;
 
@@ -18,7 +21,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.ViewHolder> {
 
-    //FIXME: refatorar o Repositories
     private ArrayList<Repository> mRepositories;
     private Context context;
 
@@ -43,8 +45,7 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         Repository repository = mRepositories.get(position);
 
-        Picasso.with(context).load(repository.getOwnerAvatarUrl())
-                .into(holder.mOwnerAvatar);
+        holder.setAvatarImage(repository.getOwnerAvatarUrl());
         holder.mRepositoryName.setText(repository.getName());
         holder.mDescription.setText(repository.getDescription());
         holder.mOwnerLogin.setText(repository.getOwnerLogin());
@@ -87,6 +88,21 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
         public void onClick(View view) {
             int position = getAdapterPosition();
             Toast.makeText(context, mRepositoryName.getText().toString(), Toast.LENGTH_SHORT).show();
+
+            Intent pullRequestIntent = new Intent(context, PullRequestsActivity.class);
+            pullRequestIntent.putExtra("REPO_FULL_NAME",mRepositories.get(position).getFullName());
+            context.startActivity(pullRequestIntent);
+
+            //create new intent
+            //send owner and repositoryName
+
+            //on new intent, call {base_url} + /repos/{owner}/{repo}/pulls
+
+        }
+
+        public void setAvatarImage(String ownerAvatarUrl) {
+            Picasso.with(context).load(ownerAvatarUrl)
+                    .into(mOwnerAvatar);
         }
     }
 }
