@@ -2,8 +2,6 @@ package com.dmaila.githubjavatrending.data;
 
 import com.squareup.moshi.Json;
 
-import java.sql.Timestamp;
-
 public class PullRequest {
 
     @Json(name = "url")
@@ -29,9 +27,9 @@ public class PullRequest {
     @Json(name = "updated_at")
     private String updatedAt;
     @Json(name = "closed_at")
-    private Timestamp closedAt;
+    private String closedAt;
     @Json(name = "merged_at")
-    private Timestamp mergedAt;
+    private String mergedAt;
     @Json(name = "head")
     private Head head;
 
@@ -165,7 +163,7 @@ public class PullRequest {
         return closedAt;
     }
 
-    public void setClosedAt(Timestamp closedAt) {
+    public void setClosedAt(String closedAt) {
         this.closedAt = closedAt;
     }
 
@@ -173,7 +171,7 @@ public class PullRequest {
         return mergedAt;
     }
 
-    public void setMergedAt(Timestamp mergedAt) {
+    public void setMergedAt(String mergedAt) {
         this.mergedAt = mergedAt;
     }
 

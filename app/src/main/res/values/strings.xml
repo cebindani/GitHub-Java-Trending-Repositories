@@ -10,4 +10,5 @@
     <string name="repository_name">Repository Name</string>
     <string name="fork_count_string">12333</string>
     <string name="star_count_string">24123</string>
+    <string name="opened_closed_status">%d opened / %d closed</string>
 </resources>

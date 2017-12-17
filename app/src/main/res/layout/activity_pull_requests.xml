@@ -15,9 +15,10 @@
         android:layout_height="wrap_content"
         android:background="@color/lightGray"
         android:padding="16dp"
-        tools:text="16 opened / 800 closed" />
+        tools:text="@string/opened_closed_status" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/pullRequestRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

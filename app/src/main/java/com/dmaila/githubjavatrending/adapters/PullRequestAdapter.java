@@ -14,10 +14,8 @@ import com.dmaila.githubjavatrending.R;
 import com.dmaila.githubjavatrending.data.PullRequest;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 public class PullRequestAdapter extends RecyclerView.Adapter<PullRequestAdapter.ViewHolder> {
@@ -50,10 +48,12 @@ public class PullRequestAdapter extends RecyclerView.Adapter<PullRequestAdapter.
             holder.pullRequestOwnerLogin.setText(pullRequest.getPullRequestOwnerLogin());
             holder.pullRequestOwnerFullName.setText(pullRequest.getRepositoryFullName());
 
-            String createdDate = new SimpleDateFormat(TIMESTAMP_MASK, Locale.getDefault()).format(pullRequest.getCreatedAt());
-            String updatedDate = new SimpleDateFormat(TIMESTAMP_MASK, Locale.getDefault()).format(pullRequest.getUpdatedAt());
-            String createdDateFormated = String.format(holder.createdString, createdDate);
-            String updatedDateFormated = String.format(holder.updatedString, updatedDate);
+            //fixme: date
+            String createdDate = pullRequest.getCreatedAt(); //new SimpleDateFormat(TIMESTAMP_MASK, Locale.getDefault()).format(pullRequest.getCreatedAt());
+            String updatedDate = pullRequest.getUpdatedAt(); //new SimpleDateFormat(TIMESTAMP_MASK, Locale.getDefault()).format(pullRequest.getUpdatedAt());
+            String createdDateFormated = context.getString(R.string.created, createdDate);
+            String updatedDateFormated = context.getString(R.string.updated, updatedDate);
+
             holder.setAvatarImage(pullRequest.getPullRequestOwnerAvatar());
             holder.createDateView.setText(createdDateFormated);
             holder.updateDateView.setText(updatedDateFormated);
@@ -92,9 +92,6 @@ public class PullRequestAdapter extends RecyclerView.Adapter<PullRequestAdapter.
             updateDateView = (TextView) itemView.findViewById(R.id.pullRequestUpdated);
 
             pullRequestOwnerAvatar = (ImageView) itemView.findViewById(R.id.pullRequestOwnerAvatar);
-
-            createdString = String.valueOf(R.string.created);
-            updatedString = String.valueOf(R.string.updated);
 
             itemView.setOnClickListener(this);
 
