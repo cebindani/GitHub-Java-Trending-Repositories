@@ -6,6 +6,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.dmaila.githubjavatrending.adapters.RepositoryAdapter;
 import com.dmaila.githubjavatrending.data.Repository;
 
 import java.util.ArrayList;

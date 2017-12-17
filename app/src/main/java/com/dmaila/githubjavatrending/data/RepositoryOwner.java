@@ -2,7 +2,7 @@ package com.dmaila.githubjavatrending.data;
 
 import com.squareup.moshi.Json;
 
-public class Owner {
+public class RepositoryOwner {
 
     @Json(name = "login")
     private String login;
@@ -22,8 +22,6 @@ public class Owner {
     public String getAvatarUrl() {
         return avatarUrl;
     }
-
-
 
     public String getHtmlUrl() {
         return htmlUrl;

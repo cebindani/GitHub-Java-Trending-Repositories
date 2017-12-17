@@ -12,7 +12,7 @@ public class Repository {
     @Json(name = "full_name")
     private String fullName;
     @Json(name = "owner")
-    private Owner owner;
+    private RepositoryOwner repositoryOwner;
     @Json(name = "description")
     private String description;
     @Json(name = "pulls_url")
@@ -49,12 +49,12 @@ public class Repository {
         this.fullName = fullName;
     }
 
-    public Owner getOwner() {
-        return owner;
+    public RepositoryOwner getRepositoryOwner() {
+        return repositoryOwner;
     }
 
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setRepositoryOwner(RepositoryOwner repositoryOwner) {
+        this.repositoryOwner = repositoryOwner;
     }
 
     public String getDescription() {
@@ -90,15 +90,15 @@ public class Repository {
     }
 
     public String getOwnerLogin() {
-        return owner.getLogin();
+        return repositoryOwner.getLogin();
     }
 
     public String getOwnerAvatarUrl() {
-        return owner.getAvatarUrl();
+        return repositoryOwner.getAvatarUrl();
     }
 
     public String getOwnerHtmlUrl() {
-        return owner.getHtmlUrl();
+        return repositoryOwner.getHtmlUrl();
     }
 
     @Override
@@ -107,7 +107,7 @@ public class Repository {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", fullName='" + fullName + '\'' +
-                ", owner=" + owner +
+                ", repositoryOwner=" + repositoryOwner +
                 ", description='" + description + '\'' +
                 ", pullsUrl='" + pullsUrl + '\'' +
                 ", stargazersCount=" + stargazersCount +
