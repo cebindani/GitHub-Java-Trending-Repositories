@@ -2,13 +2,13 @@ package com.dmaila.githubjavatrending.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dmaila.githubjavatrending.R;
 import com.dmaila.githubjavatrending.data.PullRequest;
@@ -132,13 +132,10 @@ public class PullRequestAdapter extends RecyclerView.Adapter<PullRequestAdapter.
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            Toast.makeText(context, pullRequestTitle.getText().toString(), Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent();
-            //create new intent
-            //send owner and repositoryName
-
-            //on new intent, call {base_url} + /repos/{owner}/{repo}/pulls
+            String pullRequestUrl = pullRequests.get(position).getHtmlUrl();
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(pullRequestUrl));
+            context.startActivity(webIntent);
 
         }
 
