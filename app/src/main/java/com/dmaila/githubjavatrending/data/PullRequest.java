@@ -62,7 +62,11 @@ public class PullRequest {
     }
 
     public String getRepositoryFullName() {
-        return head.getRepo().getFullName();
+        if (head.getRepo() != null) {
+            return head.getRepo().getFullName();
+        } else {
+            return null;
+        }
     }
 
     public void setRepositoryFullName(String repositoryFullName) {
@@ -92,7 +96,6 @@ public class PullRequest {
     public void setHtmlUrl(String htmlUrl) {
         this.htmlUrl = htmlUrl;
     }
-
 
     public String getIssueUrl() {
         return issueUrl;

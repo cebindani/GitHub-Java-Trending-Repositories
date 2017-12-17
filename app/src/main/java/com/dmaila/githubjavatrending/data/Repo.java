@@ -4,27 +4,18 @@ import com.squareup.moshi.Json;
 
 public class Repo {
 
-    @Json(name = "id")
-    private Integer id;
+
     @Json(name = "name")
-    private String name;
+    private String pullRequestRepositoryName;
     @Json(name = "full_name")
     private String fullName;
 
-    public Integer getId() {
-        return id;
+    public String getPullRequestRepositoryName() {
+        return pullRequestRepositoryName;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setPullRequestRepositoryName(String pullRequestRepositoryName) {
+        this.pullRequestRepositoryName = pullRequestRepositoryName;
     }
 
     public String getFullName() {
