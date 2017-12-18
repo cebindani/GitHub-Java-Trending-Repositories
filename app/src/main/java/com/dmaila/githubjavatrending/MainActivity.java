@@ -1,10 +1,12 @@
 package com.dmaila.githubjavatrending;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.dmaila.githubjavatrending.adapters.RepositoryAdapter;
@@ -18,32 +20,22 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     private final int defaultPage = 1;
     RecyclerView recyclerView;
     List<Repository> repositories = new ArrayList<>();
-//    private EndlessRecyclerViewScrollListener scrollListener;
+    //    private EndlessRecyclerViewScrollListener scrollListener;
     private int page = defaultPage;
     private RepositoryAdapter repositoryAdapter;
     private LinearLayoutManager layoutManager;
     private boolean isNewRequest = true;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initViews();
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                int adapterPosition = layoutManager.findLastVisibleItemPosition();
 
-                if (adapterPosition == repositoryAdapter.getItemCount() - 1) {
-                    onLoadMore(false);
-                }
-            }
-
-        });
 //        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
 //            @Override
 //            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -57,8 +49,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     }
 
     private void initViews() {
-        setContentView(R.layout.activity_main);
-
         recyclerView = findViewById(R.id.root_view);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -68,6 +58,19 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
         recyclerView.addItemDecoration(itemDecoration);
         repositoryAdapter = new RepositoryAdapter();
         recyclerView.setAdapter(repositoryAdapter);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int adapterPosition = layoutManager.findLastVisibleItemPosition();
+
+                if (adapterPosition == repositoryAdapter.getItemCount() - 1) {
+                    onLoadMore(false);
+                }
+            }
+
+        });
     }
 
 
@@ -97,15 +100,19 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     @Override
     public void onSucess(ArrayList<Repository> repositories) {
 
+        initViews();
         if (repositoryAdapter != null) {
             repositoryAdapter.setAdapterList(repositories, this);
         }
         repositories.addAll(repositories);
 
+
     }
 
     @Override
     public void onFailure() {
+        Intent intent = new Intent(this, ErrorActivity.class);
+        startActivity(intent);
 
     }
 }

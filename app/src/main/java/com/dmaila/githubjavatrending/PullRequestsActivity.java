@@ -1,10 +1,13 @@
 package com.dmaila.githubjavatrending;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.dmaila.githubjavatrending.adapters.PullRequestAdapter;
@@ -36,12 +39,15 @@ public class PullRequestsActivity extends AppCompatActivity {
     private int openPullRequestsCounter = 0;
     private int closedPullRequestsCounter = 0;
     private PullRequestAdapter pullRequestAdapter;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initViews();
+//        initViews();
         initData();
+
+
     }
 
     private void initData() {
@@ -53,6 +59,15 @@ public class PullRequestsActivity extends AppCompatActivity {
 
     private void initViews() {
         setContentView(R.layout.activity_pull_requests);
+        toolbar = (Toolbar) findViewById(R.id.pull_request_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        toolbar.setTitle(repository.getName());
+        getSupportActionBar().setTitle(repository.getName());
+
 
         statusCount = findViewById(R.id.pull_requests_status);
         recyclerView = findViewById(R.id.pullRequestRecyclerView);
@@ -74,6 +89,7 @@ public class PullRequestsActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                startActivity(new Intent(getApplicationContext(), ErrorActivity.class));
 
             }
 
@@ -96,6 +112,7 @@ public class PullRequestsActivity extends AppCompatActivity {
     }
 
     private void updateViews(List<PullRequest> pullRequests) {
+        initViews();
         countPullRequestStatus(pullRequests);
 
         String formattedString = getString(R.string.opened_closed_status, openPullRequestsCounter, closedPullRequestsCounter);
@@ -104,7 +121,6 @@ public class PullRequestsActivity extends AppCompatActivity {
         if (pullRequestAdapter != null) {
             pullRequestAdapter.setAdapterList(pullRequests, this);
         }
-
     }
 
     private void countPullRequestStatus(List<PullRequest> pullRequests) {

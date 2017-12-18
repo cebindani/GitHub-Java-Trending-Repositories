@@ -12,4 +12,6 @@
     <string name="star_count_string">24123</string>
     <string name="opened_closed_status">%d opened / %d closed</string>
     <string name="unknown_repository">Unknown repository</string>
+    <string name="something_went_wrong">Oops,\nsomething went wrong!</string>
+    <string name="retry">Retry</string>
 </resources>
