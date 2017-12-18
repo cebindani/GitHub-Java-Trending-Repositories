@@ -36,9 +36,9 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
     public void setAdapterList(List<Repository> repositories, Context context) {
         if (repositories != null && !repositories.isEmpty()) {
             this.context = context;
-            this.mRepositories.clear();
+            int positionStart = getItemCount();
             this.mRepositories.addAll(repositories);
-            notifyDataSetChanged();
+            notifyItemRangeInserted(positionStart, repositories.size());
         }
 
     }
