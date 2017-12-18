@@ -28,9 +28,16 @@ public class PullRequestAdapter extends RecyclerView.Adapter<PullRequestAdapter.
     private List<PullRequest> pullRequests = new ArrayList<>();
     private Context context;
 
-    public PullRequestAdapter(ArrayList<PullRequest> pullRequests, Context context) {
-        this.pullRequests = pullRequests;
-        this.context = context;
+    public PullRequestAdapter() {
+    }
+
+    public void setAdapterList(List<PullRequest> pullRequests, Context context) {
+        if (pullRequests != null && !pullRequests.isEmpty()) {
+            this.context = context;
+            this.pullRequests.clear();
+            this.pullRequests.addAll(pullRequests);
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -70,12 +77,11 @@ public class PullRequestAdapter extends RecyclerView.Adapter<PullRequestAdapter.
 
             if (pullRequest.getState().equals("open")) {
                 holder.pullRequestStatusView.setBackgroundColor(context.getResources().getColor(R.color.stateOpen));
-            } else if (!pullRequest.getState().equals("open")  && pullRequest.getMergedAt() != null) {
+            } else if (!pullRequest.getState().equals("open") && pullRequest.getMergedAt() != null) {
                 holder.pullRequestStatusView.setBackgroundColor(context.getResources().getColor(R.color.stateMerged));
             } else {
                 holder.pullRequestStatusView.setBackgroundColor(context.getResources().getColor(R.color.stateClosed));
             }
-
 
 
         }

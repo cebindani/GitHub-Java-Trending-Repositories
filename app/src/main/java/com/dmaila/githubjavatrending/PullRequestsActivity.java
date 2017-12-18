@@ -27,25 +27,42 @@ import okhttp3.Response;
 
 public class PullRequestsActivity extends AppCompatActivity {
 
-    private static final String PR_OPEN = "open";
     public static final String REPOSITORY_EXTRA = "REPOSITORY_EXTRA";
-
-    private int openPullRequestsCounter = 0;
-    private int closedPullRequestsCounter = 0;
-
+    private static final String PR_OPEN = "open";
     Repository repository;
     List<PullRequest> pullRequests = new ArrayList<>();
+    TextView statusCount;
+    RecyclerView recyclerView;
+    private int openPullRequestsCounter = 0;
+    private int closedPullRequestsCounter = 0;
+    private PullRequestAdapter pullRequestAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initViews();
+        initData();
+    }
+
+    private void initData() {
+        if (getIntent() != null && getIntent().hasExtra(REPOSITORY_EXTRA)) {
+            repository = getIntent().getParcelableExtra(REPOSITORY_EXTRA);
+            getPullRequests(repository.getOwnerLogin(), repository.getName());
+        }
+    }
+
+    private void initViews() {
         setContentView(R.layout.activity_pull_requests);
 
+        statusCount = findViewById(R.id.pull_requests_status);
+        recyclerView = findViewById(R.id.pullRequestRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        if (getIntent() != null && getIntent().hasExtra(REPOSITORY_EXTRA))
-            repository = getIntent().getParcelableExtra(REPOSITORY_EXTRA);
-
-            getPullRequests(repository.getOwnerLogin(), repository.getName());
+        RecyclerView.ItemDecoration itemDecoration
+                = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
+        pullRequestAdapter = new PullRequestAdapter();
+        recyclerView.setAdapter(pullRequestAdapter);
     }
 
     private void getPullRequests(String ownerLogin, String repoFullName) {
@@ -65,38 +82,28 @@ public class PullRequestsActivity extends AppCompatActivity {
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
                 }
-
                 pullRequests = getPullRequestsModel(response.body().string());
 
                 PullRequestsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        updateView(pullRequests);
+                        updateViews(pullRequests);
 
                     }
                 });
-
-
             }
         });
     }
 
-    private void updateView(List<PullRequest> pullRequests) {
+    private void updateViews(List<PullRequest> pullRequests) {
         countPullRequestStatus(pullRequests);
 
-        TextView statusCount = findViewById(R.id.pull_requests_status);
-        String formatedString = getString(R.string.opened_closed_status, openPullRequestsCounter, closedPullRequestsCounter);
-        statusCount.setText(formatedString);
+        String formattedString = getString(R.string.opened_closed_status, openPullRequestsCounter, closedPullRequestsCounter);
+        statusCount.setText(formattedString);
 
-        RecyclerView recyclerView = findViewById(R.id.pullRequestRecyclerView);
-        PullRequestAdapter pullRequestAdapter
-                = new PullRequestAdapter(new ArrayList<PullRequest>(pullRequests), this);
-        recyclerView.setAdapter(pullRequestAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        RecyclerView.ItemDecoration itemDecoration
-                = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(itemDecoration);
+        if (pullRequestAdapter != null) {
+            pullRequestAdapter.setAdapterList(pullRequests, this);
+        }
 
     }
 
