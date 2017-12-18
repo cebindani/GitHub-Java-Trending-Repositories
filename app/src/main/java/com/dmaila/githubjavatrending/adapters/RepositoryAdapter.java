@@ -14,6 +14,7 @@ import com.dmaila.githubjavatrending.data.Repository;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -22,16 +23,24 @@ import static com.dmaila.githubjavatrending.PullRequestsActivity.REPOSITORY_EXTR
 
 public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.ViewHolder> {
 
-    private ArrayList<Repository> mRepositories;
+    private ArrayList<Repository> mRepositories = new ArrayList<>();
     private Context context;
 
-    public RepositoryAdapter(ArrayList<Repository> mRepositories, Context context) {
-        this.mRepositories = mRepositories;
-        this.context = context;
+    public RepositoryAdapter() {
     }
 
     public Context getContext() {
         return context;
+    }
+
+    public void setAdapterList(List<Repository> repositories, Context context) {
+        if (repositories != null && !repositories.isEmpty()) {
+            this.context = context;
+            this.mRepositories.clear();
+            this.mRepositories.addAll(repositories);
+            notifyDataSetChanged();
+        }
+
     }
 
     @Override

@@ -4,10 +4,11 @@ import android.os.AsyncTask;
 
 import com.dmaila.githubjavatrending.data.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class Backend extends AsyncTask<Void, Void, List<Repository>> {
+public class Backend extends AsyncTask<Integer, Void, List<Repository>> {
 
     private String responseJson = null;
     private AsyncResponse mAsyncResponse;
@@ -18,8 +19,9 @@ public class Backend extends AsyncTask<Void, Void, List<Repository>> {
 
 
     @Override
-    protected List<Repository> doInBackground(Void... voids) {
-        return getRepositories(1);
+    protected List<Repository> doInBackground(Integer... params) {
+        int page = params[0];
+        return getRepositories(page);
     }
 
     @Override
@@ -27,7 +29,7 @@ public class Backend extends AsyncTask<Void, Void, List<Repository>> {
         super.onPostExecute(repositories);
 
         if (repositories != null && !repositories.isEmpty()) {
-            mAsyncResponse.onSucess(repositories);
+            mAsyncResponse.onSucess((ArrayList<Repository>) repositories);
         } else {
             mAsyncResponse.onFailure();
         }

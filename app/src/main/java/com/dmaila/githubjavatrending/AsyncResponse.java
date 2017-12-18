@@ -3,11 +3,11 @@ package com.dmaila.githubjavatrending;
 
 import com.dmaila.githubjavatrending.data.Repository;
 
-import java.util.List;
+import java.util.ArrayList;
 
 interface AsyncResponse {
 
-    void onSucess(List<Repository> list);
+    void onSucess(ArrayList<Repository> list);
 
     void onFailure();
 }
