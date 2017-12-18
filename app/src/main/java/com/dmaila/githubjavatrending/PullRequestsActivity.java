@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.dmaila.githubjavatrending.adapters.PullRequestAdapter;
 import com.dmaila.githubjavatrending.data.PullRequest;
 import com.dmaila.githubjavatrending.data.Repository;
+import com.dmaila.githubjavatrending.utils.ApiUtils;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
@@ -83,7 +84,7 @@ public class PullRequestsActivity extends AppCompatActivity {
     private void getPullRequests(String ownerLogin, String repoFullName) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(BackendUtils.buildPullRequestsURL(ownerLogin, repoFullName))
+                .url(ApiUtils.buildPullRequestsURL(ownerLogin, repoFullName))
                 .build();
 
         client.newCall(request).enqueue(new Callback() {

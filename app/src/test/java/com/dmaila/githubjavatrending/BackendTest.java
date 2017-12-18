@@ -1,5 +1,7 @@
 package com.dmaila.githubjavatrending;
 
+import com.dmaila.githubjavatrending.utils.ApiUtils;
+
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -7,7 +9,7 @@ import static junit.framework.Assert.assertEquals;
 
 public class BackendTest {
 
-    BackendUtils api;
+    ApiUtils api;
 
     @Test
     public void buildSearchJavaRepositories_buildCorrectUrl() throws Exception {

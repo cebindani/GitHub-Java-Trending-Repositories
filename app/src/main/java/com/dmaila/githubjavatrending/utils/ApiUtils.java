@@ -1,11 +1,10 @@
-package com.dmaila.githubjavatrending;
+package com.dmaila.githubjavatrending.utils;
 
 import okhttp3.HttpUrl;
 
 
-class BackendUtils {
+public class ApiUtils {
     private static final String GITHUB_BASE_URL = "https://api.github.com";
-
 
 
     public static String buildPullRequestsURL(String owner, String repoName) {
@@ -15,13 +14,13 @@ class BackendUtils {
                 .addPathSegment(owner)
                 .addPathSegment(repoName)
                 .addPathSegment("pulls")
-                .addQueryParameter("state","all")
+                .addQueryParameter("state", "all")
                 .build();
         return url.toString();
 
     }
 
-    protected static String buildSearchJavaRepositoriesURL(Object page) {
+    public static String buildSearchJavaRepositoriesURL(Object page) {
 
         HttpUrl url = HttpUrl.parse(GITHUB_BASE_URL)
                 .newBuilder()
