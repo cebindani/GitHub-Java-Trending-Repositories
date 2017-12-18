@@ -1,11 +1,17 @@
 package com.dmaila.githubjavatrending;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.dmaila.githubjavatrending.adapters.RepositoryAdapter;
@@ -89,15 +95,19 @@ public class MainActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                //                    Intent intent = new Intent(getApplicationContext(), ErrorActivity.class);
-//                startActivity(intent);
+                if (!isOnline()) {
+                    callSnackbar(getString(R.string.you_are_offline), false);
+                } else {
+                    callSnackbar(e.getLocalizedMessage(), true);
+                }
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
-
+//                    Intent intent = new Intent(getApplicationContext(), ErrorActivity.class);
+//                startActivity(intent);
                 }
                 repositories = getRepositoriesModel(response.body().string());
 
@@ -113,6 +123,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private Boolean isOnline() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+
+    }
+
+    private void callSnackbar(String localizedMessage, Boolean online) {
+        LinearLayout parentView = findViewById(R.id.main_activity_parent_view);
+        Snackbar mySnackbar = Snackbar.make(parentView,localizedMessage, Snackbar.LENGTH_INDEFINITE);
+        mySnackbar.setAction(R.string.try_again, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getRepositories(page);
+            }
+        });
+        mySnackbar.show();
+    }
 
     private List<Repository> getRepositoriesModel(String responseJson) throws IOException {
 
@@ -129,3 +160,4 @@ public class MainActivity extends AppCompatActivity {
         this.repositories.addAll(repositories);
     }
 }
+
