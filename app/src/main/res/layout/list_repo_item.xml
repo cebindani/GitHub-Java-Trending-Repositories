@@ -28,11 +28,11 @@
     <TextView
         android:id="@+id/repositoryName"
         style="@style/item_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/ownerAvatar"
+        android:layout_toStartOf="@id/ownerAvatar"
         android:text="@string/repository_name" />
 
     <TextView
@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/repositoryName"
         android:layout_below="@id/repositoryName"
+        android:layout_marginTop="4dp"
         android:layout_toStartOf="@id/ownerAvatar"
         android:lines="2"
         android:text="@string/lorem_ipsun" />
@@ -49,13 +50,11 @@
     <ImageView
         android:id="@+id/starIcon"
         android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
         android:layout_alignStart="@id/repositoryDescription"
         android:layout_below="@+id/repositoryDescription"
-        android:layout_centerHorizontal="true"
         android:layout_margin="4dp"
-        android:src="@android:drawable/star_on" />
+        android:src="@drawable/ic_star" />
 
     <TextView
         android:id="@+id/starsCount"
@@ -63,7 +62,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/starIcon"
-        android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/starIcon"
         android:paddingEnd="16dp"
         android:text="@string/star_count_string"
@@ -72,12 +70,11 @@
     <ImageView
         android:id="@+id/forkIcon"
         android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
         android:layout_below="@id/repositoryDescription"
         android:layout_margin="4dp"
         android:layout_toEndOf="@+id/starsCount"
-        android:src="@android:drawable/ic_menu_share" />
+        android:src="@drawable/ic_repo_forked" />
 
     <TextView
         android:id="@+id/forksCount"
@@ -85,7 +82,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/forkIcon"
-        android:layout_alignParentBottom="true"
         android:layout_toEndOf="@id/forkIcon"
         android:text="@string/fork_count_string" />
 
