@@ -1,7 +1,12 @@
 package com.dmaila.githubjavatrending;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -33,21 +38,51 @@ public class PullRequestsActivity extends AppCompatActivity {
 
     public static final String REPOSITORY_EXTRA = "REPOSITORY_EXTRA";
     private static final String PR_OPEN = "open";
-    Repository repository;
-    List<PullRequest> pullRequests = new ArrayList<>();
-    TextView statusCount;
-    RecyclerView recyclerView;
+    private Repository repository;
+    private List<PullRequest> pullRequests = new ArrayList<>();
+    private TextView statusCount;
     private int openPullRequestsCounter = 0;
     private int closedPullRequestsCounter = 0;
     private PullRequestAdapter pullRequestAdapter;
-    private Toolbar toolbar;
+    private LinearLayoutManager layoutManager;
+    private Parcelable layoutManagerState;
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("pullRequests", (ArrayList<? extends Parcelable>) pullRequests);
+        layoutManagerState = layoutManager.onSaveInstanceState();
+        outState.putParcelable("layoutManager", layoutManagerState);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            pullRequests = savedInstanceState.getParcelableArrayList("pullRequests");
+            layoutManagerState = savedInstanceState.getParcelable("layoutManager");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (layoutManager != null && pullRequestAdapter != null) {
+            layoutManager.onRestoreInstanceState(layoutManagerState);
+            pullRequestAdapter.setAdapterList(pullRequests, this);
+        } else
+            initData();
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        initViews();
-        initData();
-
 
     }
 
@@ -60,7 +95,7 @@ public class PullRequestsActivity extends AppCompatActivity {
 
     private void initViews() {
         setContentView(R.layout.activity_pull_requests);
-        toolbar = (Toolbar) findViewById(R.id.pull_request_toolbar);
+        Toolbar toolbar = findViewById(R.id.pull_request_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -71,8 +106,9 @@ public class PullRequestsActivity extends AppCompatActivity {
 
 
         statusCount = findViewById(R.id.pull_requests_status);
-        recyclerView = findViewById(R.id.pullRequestRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerView = findViewById(R.id.pullRequestRecyclerView);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
         RecyclerView.ItemDecoration itemDecoration
                 = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
@@ -89,13 +125,24 @@ public class PullRequestsActivity extends AppCompatActivity {
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                startActivity(new Intent(getApplicationContext(), ErrorActivity.class));
+            public void onFailure(@NonNull Call call, IOException e) {
+                if (isOnline())
+                    startActivity(new Intent(getApplicationContext(), ErrorActivity.class));
+
 
             }
 
+            private Boolean isOnline() {
+                ConnectivityManager connectivityManager =
+                        (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+                return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+            }
+
+
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NonNull Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
                 }

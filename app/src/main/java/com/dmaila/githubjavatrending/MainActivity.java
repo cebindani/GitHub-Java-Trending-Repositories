@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -39,7 +40,39 @@ public class MainActivity extends AppCompatActivity {
     private EndlessRecyclerViewScrollListener scrollListener;
     private int page = DEFAULT_PAGE;
     private RepositoryAdapter repositoryAdapter;
+    private LinearLayoutManager layoutManager;
+    private Parcelable layoutManagerState;
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("page", page);
+        outState.putParcelableArrayList("repositories", (ArrayList<? extends Parcelable>) repositories);
+        layoutManagerState = layoutManager.onSaveInstanceState();
+        outState.putParcelable("layoutManager", layoutManagerState);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            page = savedInstanceState.getInt("page");
+            repositories = savedInstanceState.getParcelableArrayList("repositories");
+            layoutManagerState = savedInstanceState.getParcelable("layoutManager");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (layoutManagerState != null) {
+            layoutManager.onRestoreInstanceState(layoutManagerState);
+            repositoryAdapter.setAdapterList(repositories, this);
+        } else getRepositories(page);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +84,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getRepositories(page);
 
     }
 
     private void initViews() {
-        RecyclerView recyclerView = findViewById(R.id.root_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        RecyclerView recyclerView = findViewById(R.id.repositoriesRecyclerView);
+        layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
         RecyclerView.ItemDecoration itemDecoration = new
@@ -102,12 +134,21 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+            private Boolean isOnline() {
+                ConnectivityManager connectivityManager =
+                        (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+                return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+
+            }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
-//                    Intent intent = new Intent(getApplicationContext(), ErrorActivity.class);
-//                startActivity(intent);
+
                 }
                 repositories = getRepositoriesModel(response.body().string());
 
@@ -123,19 +164,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private Boolean isOnline() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-
-
-    }
 
     private void callSnackbar(String localizedMessage, Boolean online) {
         LinearLayout parentView = findViewById(R.id.main_activity_parent_view);
-        Snackbar mySnackbar = Snackbar.make(parentView,localizedMessage, Snackbar.LENGTH_INDEFINITE);
+        Snackbar mySnackbar = Snackbar.make(parentView, localizedMessage, Snackbar.LENGTH_INDEFINITE);
         mySnackbar.setAction(R.string.try_again, new View.OnClickListener() {
             @Override
             public void onClick(View view) {

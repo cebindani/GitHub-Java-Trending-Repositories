@@ -1,8 +1,11 @@
 package com.dmaila.githubjavatrending.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.squareup.moshi.Json;
 
-public class PullRequest {
+public class PullRequest implements Parcelable {
 
     @Json(name = "url")
     private String url;
@@ -178,4 +181,64 @@ public class PullRequest {
         this.mergedAt = mergedAt;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.url);
+        dest.writeValue(this.id);
+        dest.writeString(this.htmlUrl);
+        dest.writeString(this.issueUrl);
+        dest.writeValue(this.number);
+        dest.writeString(this.state);
+        dest.writeString(this.title);
+        dest.writeParcelable(this.user, flags);
+        dest.writeString(this.body);
+        dest.writeString(this.createdAt);
+        dest.writeString(this.updatedAt);
+        dest.writeString(this.closedAt);
+        dest.writeString(this.mergedAt);
+        dest.writeParcelable(this.head, flags);
+        dest.writeString(this.repositoryFullName);
+        dest.writeString(this.pullRequestOwnerLogin);
+        dest.writeString(this.pullRequestOwnerAvatar);
+    }
+
+    public PullRequest() {
+    }
+
+    protected PullRequest(Parcel in) {
+        this.url = in.readString();
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.htmlUrl = in.readString();
+        this.issueUrl = in.readString();
+        this.number = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.state = in.readString();
+        this.title = in.readString();
+        this.user = in.readParcelable(User.class.getClassLoader());
+        this.body = in.readString();
+        this.createdAt = in.readString();
+        this.updatedAt = in.readString();
+        this.closedAt = in.readString();
+        this.mergedAt = in.readString();
+        this.head = in.readParcelable(Head.class.getClassLoader());
+        this.repositoryFullName = in.readString();
+        this.pullRequestOwnerLogin = in.readString();
+        this.pullRequestOwnerAvatar = in.readString();
+    }
+
+    public static final Parcelable.Creator<PullRequest> CREATOR = new Parcelable.Creator<PullRequest>() {
+        @Override
+        public PullRequest createFromParcel(Parcel source) {
+            return new PullRequest(source);
+        }
+
+        @Override
+        public PullRequest[] newArray(int size) {
+            return new PullRequest[size];
+        }
+    };
 }
